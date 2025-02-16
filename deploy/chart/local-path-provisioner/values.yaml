@@ -22,7 +22,7 @@ privateRegistry:
 
 imagePullSecrets: []
 nameOverride: ""
-fullnameOverride: ""
+fullnameOverride: "local-path-provisioner-custom"
 
 ## For creating the StorageClass automatically:
 storageClass:
@@ -36,11 +36,11 @@ storageClass:
   defaultClass: false
 
   ## The default volume type this storage class creates, can be "local" or "hostPath"
-  defaultVolumeType: hostPath
+  defaultVolumeType: local
 
   ## Set a StorageClass name
   ## Ignored if storageClass.create is false
-  name: local-path
+  name: local-path-custom
 
   ## ReclaimPolicy field of the class, which can be either Delete or Retain
   reclaimPolicy: Delete
@@ -49,7 +49,7 @@ storageClass:
   volumeBindingMode: WaitForFirstConsumer
 
   ## Set a path pattern, if unset the default will be used
-  # pathPattern: "{{ .PVC.Namespace }}-{{ .PVC.Name }}"
+  pathPattern: "{{ .PVC.Namespace }}/{{ .PVC.Name }}"
 
 # nodePathMap is the place user can customize where to store the data on each node.
 # 1. If one node is not listed on the nodePathMap, and Kubernetes wants to create volume on it, the paths specified in
@@ -66,7 +66,7 @@ storageClass:
 nodePathMap:
   - node: DEFAULT_PATH_FOR_NON_LISTED_NODES
     paths:
-      - /opt/local-path-provisioner
+      - /mnt/s1
 
 # `sharedFileSystemPath` allows the provisioner to use a filesystem that is mounted on all
 # nodes at the same time. In this case all access modes are supported: `ReadWriteOnce`,
@@ -137,7 +137,7 @@ serviceAccount:
   create: true
   # The name of the ServiceAccount to use.
   # If not set and create is true, a name is generated using the fullname template
-  name:
+  name: ""
 
 nodeSelector: {}
 

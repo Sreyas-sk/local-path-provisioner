@@ -1,0 +1,11 @@
+helmDefaults:
+  timeout: 600
+  createNamespace: true
+  wait: true
+
+releases:
+- name: local-path-provisioner-custom
+  chart: ./local-path-provisioner
+  namespace: local-path-custom
+  values:
+    - local-path-provisioner/values.yaml
